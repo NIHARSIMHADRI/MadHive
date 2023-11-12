@@ -14,14 +14,21 @@ const StudentSignup = () => {
     const verifyUser = async (event) => {
         event.preventDefault(); // Prevents the default form submission behavior
 
-        //const personObj = {firstName, lastName, email}
+        const personObj = {firstName, lastName, email}
 
         try {
             // Make a POST request to your Flask server
             console.log("submitting form...")
-            const response = await axios.post('http://localhost:5000/mongo_connect/check_process', { data: firstName });
-            response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-            response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+            const headers = {
+             'Access-Control-Allow-Origin' : '*',
+             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+             'Access-Control-Allow-Headers': 'Content-Type',
+             'Referrer-Policy': 'no-referrer'
+            }
+            await axios.post('http://localhost:8000/mongo_connect/check_process', {data: personObj}, {headers: headers});
+            // response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+            // response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+            // response.headers.add('Access-Control-Allow-Origin', '*')
             console.log('Data posted successfully');
           } catch (error) {
             console.error('Error posting data:', error);

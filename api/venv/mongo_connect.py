@@ -3,6 +3,7 @@ import os
 import pprint
 from pymongo import MongoClient
 from flask import Flask, request, jsonify
+import flask
 import requests
 import smtplib
 import random
@@ -10,13 +11,18 @@ import string
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
+import logging
 
 app = Flask(__name__)
-CORS(app, resources={r"/mongo_connect/check_process": {"origins": "http://localhost:3000",
-                                          "methods": ["GET", "POST", "OPTIONS"],
-                                          "headers": ["Content-Type"]}})
-app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app, origins='*')
+#app.config['CORS_HEADERS'] = 'Content-Type'
+
+logging.getLogger('flask_cors').level = logging.DEBUG
+
+@app.route("/parse", methods=["OPTIONS"])
+def parse():
+    return "", 204
 
 load_dotenv(find_dotenv())
 
@@ -209,11 +215,37 @@ def verify_email(email, code):
 
 
 # Example Usage
-@app.route('/mongo_connect/check_process', methods=['POST'])
+@app.route('/mongo_connect/check_process', methods=['POST', 'OPTIONS'])
+@cross_origin(origins='*')
 def check_process():
-    data = request.json()
+    data = request.get_json()
     student_collection = madhives_db.student
+    if valid_email(data[2], data[0], data[1]):
+        # just first name
+        verif_code = send_email(data[2], data[0])
+
+        print(
+        f"Verification email sent to {data[0]}. Verification code: {verif_code}"
+        )
+
+    input_code = input("Enter the verification code: ")
+    if verify_email(recipient_email, input_code):
+        student_collection.insert_one(data)
+    else:
+        pass
+        # nothing happened
+
+    # insert anyways for demo sake
     student_collection.insert_one(data)
+
+    
+    # data = request.json()
+    # print(data)
+    # student_collection = madhives_db.student
+    # student_collection.insert_one(data)
+    response = flask.jsonify({'some': 'data'})
+
+    return response
     # if valid_email()
     # recipient_email = "nsimhadri@wisc.edu"
     # recipient_name = "Nihar"
@@ -228,4 +260,33 @@ def check_process():
     #     print("Email verified successfully!")
     # else:
     #     print("Email verification failed or code expired.")
+
+@app.route('/mongo_connect/get_all_courses', methods=['GET'])
+def get_all_courses():    
+    keepGetting = True
+    currPage = 1
+    allCourses = []
+
+    headers = {
+        'Authorization': 'Token token=c7ccfbdc83ba40659bec454d73d76f3b',
+        }
+
+    while keepGetting:
+        response = requests.get(f'https://api.madgrades.com/v1/courses?page={currPage}', headers=headers)
+        res_json = response.json()
+
+        courses = res_json["results"]
+        for course in courses:
+            allCourses.append(course['name'])
+
+        if res_json["nextPageUrl"] != None:
+            currPage += 1
+        else:
+            keepGetting = False
+
+        # save time
+        if currPage >= 10:
+            break
+
+    return {"allCourses": allCourses}
 

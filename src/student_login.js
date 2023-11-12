@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './style.css'
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
 import {Nav, Navbar} from "react-bootstrap"
 
 const StudentLogin = () => {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
   return (
     <div className="container">
       <div className="waveWrapper waveAnimation">
@@ -30,12 +34,13 @@ const StudentLogin = () => {
                 <h5 className="card-title">Student Login</h5>
                 <form>
                   <div className="form-group">
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="email">Email</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="username"
-                      placeholder="Enter your username"
+                      id="email"
+                      placeholder="Enter your email"
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                   <div className="form-group">
@@ -45,6 +50,7 @@ const StudentLogin = () => {
                       className="form-control"
                       id="password"
                       placeholder="Enter your password"
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                   <button
