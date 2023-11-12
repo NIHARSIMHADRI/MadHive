@@ -2,33 +2,30 @@ import React from 'react';
 //import './App.css'; // Add your CSS styles here
 import './style.css'
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
-//import {BrowserRouter as Router, Route, Redirect} from "react-router-dom"
+import {useNavigate} from "react-router-dom"
 import TutorLogin from "./tutor_login.js"
+import {Nav, Navbar} from "react-bootstrap"
 
 const Home = () => {
+
+const navigate = useNavigate()
+
   return (
     <div className="container">
       <div className="waveWrapper waveAnimation">
         <div className="waveWrapperInner bgTop">
-          <nav className="navbar navbar-expand-lg navbar-dark">
-            <a className="navbar-brand" style={{ marginLeft: '10px' }} href="#">
-              MadHives
-            </a>
-            <div className="navbar-collapse collapse justify-content-end">
-              <ul className="navbar-nav">
-                <li className="nav-item">
-                  <a className="navbar-brand" href="index.html">
-                    Home
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    About Us
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </nav>
+          <Navbar bg="color" variant="dark">
+                <Navbar.Brand>
+                    {/* <img styles={{width: 250, height: 250}} src={logo} alt="help pic"/> */}
+                    
+                </Navbar.Brand>
+
+                <Nav>
+                    <Nav.Link href={`/`}>MadHives</Nav.Link>
+                    <Nav.Link href={`/about`}>About</Nav.Link>
+                    <Nav.Link href={`/`}>Home</Nav.Link>
+                </Nav>
+            </Navbar>
           <div
             className="wave waveTop"
             style={{
@@ -55,7 +52,7 @@ const Home = () => {
                       height: '70px',
                       width: '150px',
                     }}
-                    onClick={() => redirectToTutor('student_sign_in.html')}
+                    onClick={() => navigate("/student_login")}
                   >
                     Student
                   </button>
@@ -66,7 +63,7 @@ const Home = () => {
                       backgroundColor: '#C5050C',
                       width: '150px',
                     }}
-                    onClick={() => <TutorLogin />}
+                    onClick={() => navigate("/tutor_login")}
                   >
                     Tutor
                   </button>

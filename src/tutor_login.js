@@ -1,37 +1,26 @@
-
 import React from 'react';
 import './style.css'
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
+import {Nav, Navbar} from "react-bootstrap"
 
 const TutorLogin = () => {
   return (
     <div className="container">
       <div className="waveWrapper waveAnimation">
         <div className="waveWrapperInner bgTop">
-          <nav className="navbar navbar-expand-lg navbar-dark">
-            <a className="navbar-brand" style={{ marginLeft: '10px' }} href="index.html">
-              MadHives
-            </a>
-            <div className="navbar-collapse collapse justify-content-end">
-              <ul className="navbar-nav">
-                <li className="nav-item">
-                  <a className="nav-link" href="index.html">
-                    Home
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    About Us
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="btn btn-light" href="Tutor_sign_up.html">
-                    Sign Up
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </nav>
+        <Navbar bg="color" variant="dark">
+                <Navbar.Brand>
+                    {/* <img styles={{width: 250, height: 250}} src={logo} alt="help pic"/> */}
+                    
+                </Navbar.Brand>
+
+                <Nav>
+                    <Nav.Link href={`/`}>MadHives</Nav.Link>
+                    <Nav.Link href={`/about`}>About</Nav.Link>
+                    <Nav.Link href={`/`}>Home</Nav.Link>
+                    <Nav.Link href={`/tutor_signup`}>Tutor Signup</Nav.Link>
+                </Nav>
+          </Navbar>
           <div
             className="wave waveTop"
             style={{ backgroundImage: "url('your-top-wave-image-url')" }}
