@@ -5,4 +5,4 @@ accuracy = 5
 
 @app.route('/api/ml')
 def predict():
-    return {"accursacy": accuracy}
+    return {"accuracy": accuracy}
